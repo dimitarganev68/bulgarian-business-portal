@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { PageShell } from "@/components/PageShell";
 
-export const Route = createFileRoute("/darzhava")({
+export const Route = createFileRoute("/_authenticated/darzhava")({
   head: () => ({
     meta: [
       { title: "Държава | Фирмен портал" },
