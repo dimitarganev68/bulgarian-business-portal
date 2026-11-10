@@ -10,33 +10,115 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as DarzhavaRouteImport } from './routes/darzhava'
+import { Route as FakturiRouteImport } from './routes/fakturi'
+import { Route as GradRouteImport } from './routes/grad'
+import { Route as GrupiRouteImport } from './routes/grupi'
+import { Route as OtpuskiRouteImport } from './routes/otpuski'
+import { Route as PotrebiteliRouteImport } from './routes/potrebiteli'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DarzhavaRoute = DarzhavaRouteImport.update({
+  id: '/darzhava',
+  path: '/darzhava',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FakturiRoute = FakturiRouteImport.update({
+  id: '/fakturi',
+  path: '/fakturi',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GradRoute = GradRouteImport.update({
+  id: '/grad',
+  path: '/grad',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GrupiRoute = GrupiRouteImport.update({
+  id: '/grupi',
+  path: '/grupi',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OtpuskiRoute = OtpuskiRouteImport.update({
+  id: '/otpuski',
+  path: '/otpuski',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PotrebiteliRoute = PotrebiteliRouteImport.update({
+  id: '/potrebiteli',
+  path: '/potrebiteli',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/darzhava': typeof DarzhavaRoute
+  '/fakturi': typeof FakturiRoute
+  '/grad': typeof GradRoute
+  '/grupi': typeof GrupiRoute
+  '/otpuski': typeof OtpuskiRoute
+  '/potrebiteli': typeof PotrebiteliRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/darzhava': typeof DarzhavaRoute
+  '/fakturi': typeof FakturiRoute
+  '/grad': typeof GradRoute
+  '/grupi': typeof GrupiRoute
+  '/otpuski': typeof OtpuskiRoute
+  '/potrebiteli': typeof PotrebiteliRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/darzhava': typeof DarzhavaRoute
+  '/fakturi': typeof FakturiRoute
+  '/grad': typeof GradRoute
+  '/grupi': typeof GrupiRoute
+  '/otpuski': typeof OtpuskiRoute
+  '/potrebiteli': typeof PotrebiteliRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/darzhava'
+    | '/fakturi'
+    | '/grad'
+    | '/grupi'
+    | '/otpuski'
+    | '/potrebiteli'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/darzhava'
+    | '/fakturi'
+    | '/grad'
+    | '/grupi'
+    | '/otpuski'
+    | '/potrebiteli'
+  id:
+    | '__root__'
+    | '/'
+    | '/darzhava'
+    | '/fakturi'
+    | '/grad'
+    | '/grupi'
+    | '/otpuski'
+    | '/potrebiteli'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  DarzhavaRoute: typeof DarzhavaRoute
+  FakturiRoute: typeof FakturiRoute
+  GradRoute: typeof GradRoute
+  GrupiRoute: typeof GrupiRoute
+  OtpuskiRoute: typeof OtpuskiRoute
+  PotrebiteliRoute: typeof PotrebiteliRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +130,59 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/darzhava': {
+      id: '/darzhava'
+      path: '/darzhava'
+      fullPath: '/darzhava'
+      preLoaderRoute: typeof DarzhavaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/fakturi': {
+      id: '/fakturi'
+      path: '/fakturi'
+      fullPath: '/fakturi'
+      preLoaderRoute: typeof FakturiRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/grad': {
+      id: '/grad'
+      path: '/grad'
+      fullPath: '/grad'
+      preLoaderRoute: typeof GradRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/grupi': {
+      id: '/grupi'
+      path: '/grupi'
+      fullPath: '/grupi'
+      preLoaderRoute: typeof GrupiRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/otpuski': {
+      id: '/otpuski'
+      path: '/otpuski'
+      fullPath: '/otpuski'
+      preLoaderRoute: typeof OtpuskiRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/potrebiteli': {
+      id: '/potrebiteli'
+      path: '/potrebiteli'
+      fullPath: '/potrebiteli'
+      preLoaderRoute: typeof PotrebiteliRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  DarzhavaRoute: DarzhavaRoute,
+  FakturiRoute: FakturiRoute,
+  GradRoute: GradRoute,
+  GrupiRoute: GrupiRoute,
+  OtpuskiRoute: OtpuskiRoute,
+  PotrebiteliRoute: PotrebiteliRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
