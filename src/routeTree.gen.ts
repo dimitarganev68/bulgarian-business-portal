@@ -10,81 +10,98 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as DarzhavaRouteImport } from './routes/darzhava'
-import { Route as FakturiRouteImport } from './routes/fakturi'
-import { Route as GradRouteImport } from './routes/grad'
-import { Route as GrupiRouteImport } from './routes/grupi'
-import { Route as OtpuskiRouteImport } from './routes/otpuski'
-import { Route as PotrebiteliRouteImport } from './routes/potrebiteli'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
+import { Route as AuthRouteImport } from './routes/auth'
+import { Route as AuthenticatedDarzhavaRouteImport } from './routes/_authenticated/darzhava'
+import { Route as AuthenticatedFakturiRouteImport } from './routes/_authenticated/fakturi'
+import { Route as AuthenticatedGradRouteImport } from './routes/_authenticated/grad'
+import { Route as AuthenticatedGrupiRouteImport } from './routes/_authenticated/grupi'
+import { Route as AuthenticatedOtpuskiRouteImport } from './routes/_authenticated/otpuski'
+import { Route as AuthenticatedPotrebiteliRouteImport } from './routes/_authenticated/potrebiteli'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const DarzhavaRoute = DarzhavaRouteImport.update({
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedDarzhavaRoute = AuthenticatedDarzhavaRouteImport.update({
   id: '/darzhava',
   path: '/darzhava',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
-const FakturiRoute = FakturiRouteImport.update({
+const AuthenticatedFakturiRoute = AuthenticatedFakturiRouteImport.update({
   id: '/fakturi',
   path: '/fakturi',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
-const GradRoute = GradRouteImport.update({
+const AuthenticatedGradRoute = AuthenticatedGradRouteImport.update({
   id: '/grad',
   path: '/grad',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
-const GrupiRoute = GrupiRouteImport.update({
+const AuthenticatedGrupiRoute = AuthenticatedGrupiRouteImport.update({
   id: '/grupi',
   path: '/grupi',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
-const OtpuskiRoute = OtpuskiRouteImport.update({
+const AuthenticatedOtpuskiRoute = AuthenticatedOtpuskiRouteImport.update({
   id: '/otpuski',
   path: '/otpuski',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
-const PotrebiteliRoute = PotrebiteliRouteImport.update({
-  id: '/potrebiteli',
-  path: '/potrebiteli',
-  getParentRoute: () => rootRouteImport,
-} as any)
+const AuthenticatedPotrebiteliRoute =
+  AuthenticatedPotrebiteliRouteImport.update({
+    id: '/potrebiteli',
+    path: '/potrebiteli',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/darzhava': typeof DarzhavaRoute
-  '/fakturi': typeof FakturiRoute
-  '/grad': typeof GradRoute
-  '/grupi': typeof GrupiRoute
-  '/otpuski': typeof OtpuskiRoute
-  '/potrebiteli': typeof PotrebiteliRoute
+  '/auth': typeof AuthRoute
+  '/darzhava': typeof AuthenticatedDarzhavaRoute
+  '/fakturi': typeof AuthenticatedFakturiRoute
+  '/grad': typeof AuthenticatedGradRoute
+  '/grupi': typeof AuthenticatedGrupiRoute
+  '/otpuski': typeof AuthenticatedOtpuskiRoute
+  '/potrebiteli': typeof AuthenticatedPotrebiteliRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/darzhava': typeof DarzhavaRoute
-  '/fakturi': typeof FakturiRoute
-  '/grad': typeof GradRoute
-  '/grupi': typeof GrupiRoute
-  '/otpuski': typeof OtpuskiRoute
-  '/potrebiteli': typeof PotrebiteliRoute
+  '/auth': typeof AuthRoute
+  '/darzhava': typeof AuthenticatedDarzhavaRoute
+  '/fakturi': typeof AuthenticatedFakturiRoute
+  '/grad': typeof AuthenticatedGradRoute
+  '/grupi': typeof AuthenticatedGrupiRoute
+  '/otpuski': typeof AuthenticatedOtpuskiRoute
+  '/potrebiteli': typeof AuthenticatedPotrebiteliRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/darzhava': typeof DarzhavaRoute
-  '/fakturi': typeof FakturiRoute
-  '/grad': typeof GradRoute
-  '/grupi': typeof GrupiRoute
-  '/otpuski': typeof OtpuskiRoute
-  '/potrebiteli': typeof PotrebiteliRoute
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
+  '/auth': typeof AuthRoute
+  '/_authenticated/darzhava': typeof AuthenticatedDarzhavaRoute
+  '/_authenticated/fakturi': typeof AuthenticatedFakturiRoute
+  '/_authenticated/grad': typeof AuthenticatedGradRoute
+  '/_authenticated/grupi': typeof AuthenticatedGrupiRoute
+  '/_authenticated/otpuski': typeof AuthenticatedOtpuskiRoute
+  '/_authenticated/potrebiteli': typeof AuthenticatedPotrebiteliRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/auth'
     | '/darzhava'
     | '/fakturi'
     | '/grad'
@@ -94,6 +111,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/auth'
     | '/darzhava'
     | '/fakturi'
     | '/grad'
@@ -103,22 +121,20 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
-    | '/darzhava'
-    | '/fakturi'
-    | '/grad'
-    | '/grupi'
-    | '/otpuski'
-    | '/potrebiteli'
+    | '/_authenticated'
+    | '/auth'
+    | '/_authenticated/darzhava'
+    | '/_authenticated/fakturi'
+    | '/_authenticated/grad'
+    | '/_authenticated/grupi'
+    | '/_authenticated/otpuski'
+    | '/_authenticated/potrebiteli'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  DarzhavaRoute: typeof DarzhavaRoute
-  FakturiRoute: typeof FakturiRoute
-  GradRoute: typeof GradRoute
-  GrupiRoute: typeof GrupiRoute
-  OtpuskiRoute: typeof OtpuskiRoute
-  PotrebiteliRoute: typeof PotrebiteliRoute
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
+  AuthRoute: typeof AuthRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -130,59 +146,90 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/darzhava': {
-      id: '/darzhava'
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/darzhava': {
+      id: '/_authenticated/darzhava'
       path: '/darzhava'
       fullPath: '/darzhava'
-      preLoaderRoute: typeof DarzhavaRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AuthenticatedDarzhavaRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/fakturi': {
-      id: '/fakturi'
+    '/_authenticated/fakturi': {
+      id: '/_authenticated/fakturi'
       path: '/fakturi'
       fullPath: '/fakturi'
-      preLoaderRoute: typeof FakturiRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AuthenticatedFakturiRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/grad': {
-      id: '/grad'
+    '/_authenticated/grad': {
+      id: '/_authenticated/grad'
       path: '/grad'
       fullPath: '/grad'
-      preLoaderRoute: typeof GradRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AuthenticatedGradRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/grupi': {
-      id: '/grupi'
+    '/_authenticated/grupi': {
+      id: '/_authenticated/grupi'
       path: '/grupi'
       fullPath: '/grupi'
-      preLoaderRoute: typeof GrupiRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AuthenticatedGrupiRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/otpuski': {
-      id: '/otpuski'
+    '/_authenticated/otpuski': {
+      id: '/_authenticated/otpuski'
       path: '/otpuski'
       fullPath: '/otpuski'
-      preLoaderRoute: typeof OtpuskiRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AuthenticatedOtpuskiRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/potrebiteli': {
-      id: '/potrebiteli'
+    '/_authenticated/potrebiteli': {
+      id: '/_authenticated/potrebiteli'
       path: '/potrebiteli'
       fullPath: '/potrebiteli'
-      preLoaderRoute: typeof PotrebiteliRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AuthenticatedPotrebiteliRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
   }
 }
 
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedDarzhavaRoute: typeof AuthenticatedDarzhavaRoute
+  AuthenticatedFakturiRoute: typeof AuthenticatedFakturiRoute
+  AuthenticatedGradRoute: typeof AuthenticatedGradRoute
+  AuthenticatedGrupiRoute: typeof AuthenticatedGrupiRoute
+  AuthenticatedOtpuskiRoute: typeof AuthenticatedOtpuskiRoute
+  AuthenticatedPotrebiteliRoute: typeof AuthenticatedPotrebiteliRoute
+}
+
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedDarzhavaRoute: AuthenticatedDarzhavaRoute,
+  AuthenticatedFakturiRoute: AuthenticatedFakturiRoute,
+  AuthenticatedGradRoute: AuthenticatedGradRoute,
+  AuthenticatedGrupiRoute: AuthenticatedGrupiRoute,
+  AuthenticatedOtpuskiRoute: AuthenticatedOtpuskiRoute,
+  AuthenticatedPotrebiteliRoute: AuthenticatedPotrebiteliRoute,
+}
+
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  DarzhavaRoute: DarzhavaRoute,
-  FakturiRoute: FakturiRoute,
-  GradRoute: GradRoute,
-  GrupiRoute: GrupiRoute,
-  OtpuskiRoute: OtpuskiRoute,
-  PotrebiteliRoute: PotrebiteliRoute,
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
+  AuthRoute: AuthRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

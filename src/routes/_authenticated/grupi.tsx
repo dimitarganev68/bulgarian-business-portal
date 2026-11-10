@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { groupsStore, useGroups, type Group } from "@/lib/groups-store";
 
-export const Route = createFileRoute("/grupi")({
+export const Route = createFileRoute("/_authenticated/grupi")({
   head: () => ({
     meta: [
       { title: "Групи | Фирмен портал" },

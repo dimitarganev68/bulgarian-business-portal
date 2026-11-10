@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { PageShell } from "@/components/PageShell";
 
-export const Route = createFileRoute("/potrebiteli")({
+export const Route = createFileRoute("/_authenticated/potrebiteli")({
   head: () => ({
     meta: [
       { title: "Потребители | Фирмен портал" },
