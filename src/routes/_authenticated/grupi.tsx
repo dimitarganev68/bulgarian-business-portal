@@ -52,7 +52,7 @@ export const Route = createFileRoute("/_authenticated/grupi")({
   component: GroupsPage,
 });
 
-type Key = keyof Group;
+type Key = "id" | "name" | "comment";
 const cols: { key: Key; label: string }[] = [
   { key: "id", label: "ID" },
   { key: "name", label: "Име" },
@@ -178,7 +178,7 @@ function GroupForm({ existing, onClose }: { existing: Group | null; onClose: () 
   const updM = useGroupMutation((v: { id: number; name: string; comment: string }) => supabase.from("groups").update({ name: v.name, comment: v.comment }).eq("id", v.id), "Групата е обновена");
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name.trim()) return setError("Името е задължително");
+    if (!name.trim()) { setError("Името е задължително"); return; }
     const v = { name: name.trim(), comment: comment.trim() };
     const m = existing ? updM.mutateAsync({ id: existing.id, ...v }) : addM.mutateAsync(v);
     m.then(onClose, () => {});

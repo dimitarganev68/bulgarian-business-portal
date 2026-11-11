@@ -14,12 +14,12 @@ export function ChangePasswordDialog({ open, onOpenChange }: { open: boolean; on
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (next.length < 6) return toast.error("Новата парола трябва да е поне 6 символа");
-    if (next !== confirm) return toast.error("Паролите не съвпадат");
+    if (next.length < 6) { toast.error("Новата парола трябва да е поне 6 символа"); return; }
+    if (next !== confirm) { toast.error("Паролите не съвпадат"); return; }
     setBusy(true);
     const { error } = await supabase.auth.updateUser({ password: next, current_password: current } as never);
     setBusy(false);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success("Паролата е сменена");
     setCurrent(""); setNext(""); setConfirm("");
     onOpenChange(false);

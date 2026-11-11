@@ -40,14 +40,14 @@ function AuthPage() {
     setBusy(true);
     const { error } = await supabase.auth.signInWithPassword({ email, password });
     setBusy(false);
-    if (error) return toast.error("Грешен имейл или парола");
+    if (error) { toast.error("Грешен имейл или парола"); return; }
     navigate({ to: "/", replace: true });
   };
 
   const register = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!fullName.trim()) return toast.error("Името е задължително");
-    if (password.length < 6) return toast.error("Паролата трябва да е поне 6 символа");
+    if (!fullName.trim()) { toast.error("Името е задължително"); return; }
+    if (password.length < 6) { toast.error("Паролата трябва да е поне 6 символа"); return; }
     setBusy(true);
     const { data, error } = await supabase.auth.signUp({
       email,
@@ -55,7 +55,7 @@ function AuthPage() {
       options: { emailRedirectTo: window.location.origin, data: { full_name: fullName.trim() } },
     });
     setBusy(false);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     if (data.session) navigate({ to: "/", replace: true });
     else setSent(true);
   };
