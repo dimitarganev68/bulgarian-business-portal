@@ -28,3 +28,7 @@ use the editor.
   own key and store it in Secrets.
 - **Secrets.** Lovable manages them. Do not put secret values in the repo.
 <!-- LOVABLE:END -->
+
+## Project rules
+- Signed-in-only pages live under `src/routes/_authenticated/` (client-only gate redirecting to `/auth`); `/` and `/auth` stay public. Why: one gate for all protected pages.
+- Data pages read/write Supabase from the browser client with RLS; IDs come from DB identity columns. Why: keeps sequencing and access rules in the database.
