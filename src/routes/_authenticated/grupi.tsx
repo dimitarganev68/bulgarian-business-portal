@@ -11,7 +11,32 @@ import {
   AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription,
   AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { groupsStore, useGroups, type Group } from "@/lib/groups-store";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
+
+type Group = { id: number; name: string; comment: string };
+const groupsKey = ["groups"] as const;
+
+function useGroups() {
+  return useQuery({
+    queryKey: groupsKey,
+    queryFn: async () => {
+      const { data, error } = await supabase.from("groups").select("id, name, comment").order("id");
+      if (error) throw error;
+      return data as Group[];
+    },
+  });
+}
+
+function useGroupMutation<T>(fn: (v: T) => PromiseLike<{ error: unknown }>, ok: string) {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (v: T) => { const { error } = await fn(v); if (error) throw error; },
+    onSuccess: () => { qc.invalidateQueries({ queryKey: groupsKey }); toast.success(ok); },
+    onError: () => toast.error("Възникна грешка. Опитайте отново."),
+  });
+}
 
 export const Route = createFileRoute("/_authenticated/grupi")({
   head: () => ({
@@ -27,7 +52,7 @@ export const Route = createFileRoute("/_authenticated/grupi")({
   component: GroupsPage,
 });
 
-type Key = keyof Group;
+type Key = "id" | "name" | "comment";
 const cols: { key: Key; label: string }[] = [
   { key: "id", label: "ID" },
   { key: "name", label: "Име" },
@@ -35,7 +60,8 @@ const cols: { key: Key; label: string }[] = [
 ];
 
 function GroupsPage() {
-  const groups = useGroups();
+  const { data: groups = [], isLoading } = useGroups();
+  const removeM = useGroupMutation((id: number) => supabase.from("groups").delete().eq("id", id), "Групата е изтрита");
   const [sort, setSort] = useState<{ key: Key; dir: "asc" | "desc" }>({ key: "id", dir: "asc" });
   const [filters, setFilters] = useState<Record<Key, string>>({ id: "", name: "", comment: "" });
   const [editing, setEditing] = useState<Group | "new" | null>(null);
@@ -94,7 +120,7 @@ function GroupsPage() {
             {rows.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={4} className="py-10 text-center text-muted-foreground">
-                  {groups.length === 0 ? "Няма добавени групи." : "Няма резултати по зададения филтър."}
+                  {isLoading ? "Зареждане..." : groups.length === 0 ? "Няма добавени групи." : "Няма резултати по зададения филтър."}
                 </TableCell>
               </TableRow>
             ) : (
@@ -124,7 +150,7 @@ function GroupsPage() {
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Отказ</AlertDialogCancel>
-            <AlertDialogAction onClick={() => deleting && groupsStore.remove(deleting.id)}>Изтрий</AlertDialogAction>
+            <AlertDialogAction onClick={() => deleting && removeM.mutate(deleting.id)}>Изтрий</AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
@@ -148,12 +174,14 @@ function GroupForm({ existing, onClose }: { existing: Group | null; onClose: () 
   const [name, setName] = useState(existing?.name ?? "");
   const [comment, setComment] = useState(existing?.comment ?? "");
   const [error, setError] = useState("");
+  const addM = useGroupMutation((v: { name: string; comment: string }) => supabase.from("groups").insert(v), "Групата е добавена");
+  const updM = useGroupMutation((v: { id: number; name: string; comment: string }) => supabase.from("groups").update({ name: v.name, comment: v.comment }).eq("id", v.id), "Групата е обновена");
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name.trim()) return setError("Името е задължително");
-    if (existing) groupsStore.update(existing.id, name, comment);
-    else groupsStore.add(name, comment);
-    onClose();
+    if (!name.trim()) { setError("Името е задължително"); return; }
+    const v = { name: name.trim(), comment: comment.trim() };
+    const m = existing ? updM.mutateAsync({ id: existing.id, ...v }) : addM.mutateAsync(v);
+    m.then(onClose, () => {});
   };
   return (
     <form onSubmit={submit} className="space-y-4">
