@@ -29,7 +29,7 @@ function useGroups() {
   });
 }
 
-function useGroupMutation<T>(fn: (v: T) => Promise<{ error: unknown }>, ok: string) {
+function useGroupMutation<T>(fn: (v: T) => PromiseLike<{ error: unknown }>, ok: string) {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (v: T) => { const { error } = await fn(v); if (error) throw error; },

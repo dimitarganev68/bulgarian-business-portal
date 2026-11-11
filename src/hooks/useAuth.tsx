@@ -12,7 +12,7 @@ export function useAuth() {
       setUser(u);
       if (u) {
         const { data } = await supabase.from("profiles").select("full_name").eq("id", u.id).maybeSingle();
-        setName(data?.full_name || (u.user_metadata?.full_name as string) || u.email || "");
+        setName(data?.full_name || (u.user_metadata?.["full_name"] as string) || u.email || "");
       } else setName("");
       setReady(true);
     };
